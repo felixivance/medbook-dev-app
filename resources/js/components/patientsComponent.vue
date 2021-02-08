@@ -191,8 +191,8 @@ export default {
             this.form.fill(patient)
             // console.log(this.form);
         },
-        getPatients() {
-            axios.get('/api/patients').then(({ data }) => {
+      async  getPatients() {
+          await  axios.get('/api/patients').then(({ data }) => {
                 // console.log(data)
                 this.items = data.data;
                 this.totalRows = this.items.length
@@ -200,8 +200,8 @@ export default {
                 console.log(error);
             });
         },
-        addPatient() {
-            axios.post('/api/patients/', this.form).then(({ data }) => {
+       async addPatient() {
+          await  axios.post('/api/patients/', this.form).then(({ data }) => {
                 // console.log(data);
                 if (data.success) {
                     this.form.reset();
@@ -217,8 +217,8 @@ export default {
                 console.log(error);
             });
         },
-        updatePatient() {
-            axios.put('/api/patients/' + this.form.id, this.form).then(({ data }) => {
+      async  updatePatient() {
+         await   axios.put('/api/patients/' + this.form.id, this.form).then(({ data }) => {
                 // console.log(data);
                 if (data.success) {
                     this.form.reset();
@@ -234,8 +234,8 @@ export default {
                 console.log(error);
             });
         },
-        deletePatient(id) {
-            Swal.fire({
+      async  deletePatient(id) {
+         await   Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
                 icon: 'warning',
@@ -264,16 +264,16 @@ export default {
                 }
             })
         },
-        getGenders() {
-            axios.get('/api/genders').then(({ data }) => {
+      async  getGenders() {
+         await   axios.get('/api/genders').then(({ data }) => {
                 // console.log(data)
                 this.genders = data.data;
             }).catch((error) => {
                 console.log(error);
             });
         },
-        getServices() {
-            axios.get('/api/services').then(({ data }) => {
+      async  getServices() {
+          await  axios.get('/api/services').then(({ data }) => {
                 // console.log(data)
                 this.services = data.data;
             }).catch((error) => {

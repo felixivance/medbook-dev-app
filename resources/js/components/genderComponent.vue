@@ -140,8 +140,8 @@ export default {
             this.form.fill(gender)
             // console.log(this.form);
         },
-        getGenders() {
-            axios.get('/api/genders').then(({ data }) => {
+      async  getGenders() {
+          await  axios.get('/api/genders').then(({ data }) => {
                 // console.log(data)
                 this.items = data.data;
                 this.totalRows = this.items.length

@@ -32,5 +32,8 @@ Clone the repository from https://github.com/felixivance/medbook-dev-app.git
   
   admin@hrms.com as the email and password12345 as the password
   
+  Login Page should look like:
   
+  ![alt text](https://github.com/felixivance/medbook-dev-app.git/blob/master/public/screenshorts/login.png?raw=true)
+
  

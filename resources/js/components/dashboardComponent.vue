@@ -45,8 +45,8 @@ export default {
             this.totalRows = filteredItems.length
             this.currentPage = 1
         },
-        getStats() {
-            axios.get('/api/dashboardStatistics').then(({ data }) => {
+        async  getStats() {
+           await axios.get('/api/dashboardStatistics').then(({ data }) => {
                 console.log(data.data)
                 this.stats = data.data;
             }).catch((error) => {
@@ -55,7 +55,7 @@ export default {
         },
 
     },
-    mounted() {
+    created() {
         this.getStats();
 
     },
