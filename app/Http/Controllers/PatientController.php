@@ -95,4 +95,9 @@ class PatientController extends Controller
                 'error deleting patient information', null);
         }
     }
+    public function dashboardStatistics(){
+        $patients = Patient::get()->count();
+        return api_response(true, null, 'success',
+            'successfully fetched stats', $patients);
+    }
 }

@@ -22,8 +22,8 @@ Route::group(['middleware' => 'auth:api'], function() {
 
     ]);
 
-//    Route::get('tenantStatements','PaymentController@getTenantsStatement');
-//    Route::get('dashboardStatistics','TenantController@dashboardStatistics');
-//    Route::get('paymentsPerMonth','PaymentController@PaymentsPerMonth');
+
+    Route::get('dashboardStatistics','PatientController@dashboardStatistics');
+
 
 });
