@@ -11,10 +11,10 @@ class GenderController extends Controller
     public function index()
     {
         //get all genders
-        $gender = Gender::orderBy('genderType','desc')->get();
+        $genders = Gender::orderBy('genderType','desc')->get();
 
         return api_response(true, null, 'success',
-            'successfully fetched genders', $house);
+            'successfully fetched genders', $genders);
     }
 
 

@@ -11,10 +11,10 @@
                             <div class="card-header bg-dark">
                                 <div class="row">
                                     <div class="col-md-10">
-                                        <strong class="card-title text-light">Houses</strong>
+                                        <strong class="card-title text-light">Patients</strong>
                                     </div>
                                     <div class="col-md-2">
-                                        <button @click="openModal" type="button" class="btn btn-primary">Add House</button>
+                                        <button @click="openModal" type="button" class="btn btn-primary">Add Patient</button>
                                     </div>
                                 </div>
                             </div>
@@ -30,7 +30,7 @@
                                                     <option value="100">100</option>
                                                     <!-- <option value="-1">All</option> -->
                                                 </select>
-                                                entries
+                                                patients
                                             </label>
                                         </div>
                                     </div>
@@ -41,11 +41,7 @@
                                                 <b-button variant="dark" :disabled="!filter" @click="filter = ''">Clear</b-button>
                                             </b-input-group-append>
                                         </b-input-group>
-                                        <br/>
-                                        <b-button size="sm">Copy</b-button>
-                                        <b-button size="sm">Excel</b-button>
-                                        <b-button size="sm">CSV</b-button>
-                                        <b-button size="sm">PDF</b-button>
+
                                     </div>
                                 </div>
                                 <br/>
@@ -55,7 +51,7 @@
                                             Edit
                                         </b-button>
                                         &nbsp;
-                                        <b-button @click="deleteHouse(row.item.id)" class="btn btn-sm" variant="danger">
+                                        <b-button @click="deletePatient(row.item.id)" class="btn btn-sm" variant="danger">
                                             Delete
                                         </b-button>
                                     </template>
@@ -78,24 +74,65 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        <h5 v-if="!editMode" class="modal-title" id="mediumModalLabel">Add House</h5>
-                        <h5 v-else class="modal-title" id="mediumModalLabel">Update House</h5>
+                        <h5 v-if="!editMode" class="modal-title" id="mediumModalLabel">Add Patient</h5>
+                        <h5 v-else class="modal-title" id="mediumModalLabel">Update Patient</h5>
                     </div>
-                    <form @submit.prevent="editMode ? updateHouse() : addHouse()">
+                    <form @submit.prevent="editMode ? updatePatient() : addPatient()">
                         <div class="modal-body">
-                            <div class="form-group">
-                                <label for="company" class="form-control-label">House Number:</label>
-                                <input required v-model="form.houseNumber" type="text" id="company" placeholder="Enter house number" class="form-control" />
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="company" class="form-control-label">First Name:</label>
+                                        <input required v-model="form.firstName" type="text" id="company" placeholder="Enter first Name" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label  class="form-control-label">Last Name:</label>
+                                        <input required v-model="form.lastName" type="text" placeholder="Enter last Name" class="form-control" />
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label  class="form-control-label">Meter Number:</label>
-                                <input required v-model="form.meterNumber" type="text" placeholder="Enter meter number" class="form-control" />
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="company" class="form-control-label">Date Of Birth:</label>
+                                        <input required v-model="form.dateOfBirth" type="date" id="company" placeholder="Date Of Birth" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label  class="form-control-label">Gender:</label>
+                                        <select v-model="form.genderId" name="select" id="select" class="form-control">
+                                            <option v-for="(gender,i) in genders" :key="i" :value="gender.id">{{gender.genderType}}</option>
+                                        </select>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="company" class="form-control-label">Type Of Service:</label>
+                                        <select v-model="form.serviceId" name="select" id="select" class="form-control">
+                                            <option v-for="(service,i) in services" :key="i" :value="service.id">{{service.typeOfService}}</option>
+                                        </select>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label  class="form-control-label">Comments</label>
+                                        <textarea v-model="form.comments" id="" cols="30" rows="10" class="form-control"></textarea>
+
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                            <button v-if="!editMode" type="submit" class="btn btn-primary">Add House</button>
-                            <button v-else type="submit" class="btn btn-primary">Update House</button>
+                            <button v-if="!editMode" type="submit" class="btn btn-primary">Add Patient</button>
+                            <button v-else type="submit" class="btn btn-primary">Update Patient</button>
                         </div>
                     </form>
                 </div>
@@ -110,8 +147,14 @@ import $ from 'jquery';
 export default {
     data() {
         return {
-            fields: ['#', 'houseNumber', 'meterNumber', 'actions'],
+            fields: ['#', 'firstName','lastName',
+                {key:'dateOfBirth', label:'Date Of Birth'},
+                {key:'gender.genderType', label:'Gender'},
+                {key:'service.typeOfService', label:'Type Of Service'},
+                {key:'comments', label:'Comments'},'actions'],
             items: [],
+            genders: [],
+            services: [],
             perPage: 10,
             currentPage: 1,
             filter: null,
@@ -119,8 +162,12 @@ export default {
             editMode: false,
             form: new Form({
                 id: '',
-                houseNumber: '',
-                meterNumber: '',
+                firstName: '',
+                dateOfBirth:'',
+                lastName: '',
+                genderId: '',
+                serviceId: '',
+                comments: '',
             })
         }
     },
@@ -138,14 +185,14 @@ export default {
             $('#mediumModal').modal('show');
             this.editMode = false;
         },
-        openEditModal(house) {
+        openEditModal(patient) {
             $('#mediumModal').modal('show');
             this.editMode = true;
-            this.form.fill(house)
+            this.form.fill(patient)
             // console.log(this.form);
         },
-        getHouses() {
-            axios.get('/api/houses').then(({ data }) => {
+        getPatients() {
+            axios.get('/api/patients').then(({ data }) => {
                 // console.log(data)
                 this.items = data.data;
                 this.totalRows = this.items.length
@@ -153,45 +200,41 @@ export default {
                 console.log(error);
             });
         },
-        addHouse() {
-            axios.post('/api/houses/', this.form).then(({ data }) => {
+        addPatient() {
+            axios.post('/api/patients/', this.form).then(({ data }) => {
                 // console.log(data);
                 if (data.success) {
                     this.form.reset();
-                    this.getHouses();
+                    this.getPatients();
                     $('#mediumModal').modal('hide');
                     Swal.fire({
-                        position: 'top-end',
                         icon: 'success',
-                        title: 'House added.',
+                        title: 'Patient added.',
                         showConfirmButton: true,
-                        timer: 1000
                     });
                 }
             }).catch((error) => {
                 console.log(error);
             });
         },
-        updateHouse() {
-            axios.put('/api/houses/' + this.form.id, this.form).then(({ data }) => {
+        updatePatient() {
+            axios.put('/api/patients/' + this.form.id, this.form).then(({ data }) => {
                 // console.log(data);
                 if (data.success) {
                     this.form.reset();
-                    this.getHouses();
+                    this.getPatients();
                     $('#mediumModal').modal('hide');
                     Swal.fire({
-                        position: 'top-end',
                         icon: 'success',
-                        title: 'House updated.',
+                        title: 'Patient updated.',
                         showConfirmButton: true,
-                        timer: 1000
                     });
                 }
             }).catch((error) => {
                 console.log(error);
             });
         },
-        deleteHouse(id) {
+        deletePatient(id) {
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
@@ -199,19 +242,19 @@ export default {
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete house!'
+                confirmButtonText: 'Yes, delete patient!'
             }).then((result) => {
                 if (result.isConfirmed) {
                     console.log(id);
-                    axios.delete('/api/houses/' + id,).then(({ data }) => {
+                    axios.delete('/api/patients/' + id,).then(({ data }) => {
                         // console.log(data);
                         if (data.success) {
                             this.form.reset();
-                            this.getHouses();
+                            this.getPatients();
                             $('#mediumModal').modal('hide');
                             Swal.fire(
                                 'Deleted!',
-                                'House has been deleted.',
+                                'Patient has been deleted.',
                                 'success'
                             )
                         }
@@ -220,10 +263,28 @@ export default {
                     });
                 }
             })
-        }
+        },
+        getGenders() {
+            axios.get('/api/genders').then(({ data }) => {
+                // console.log(data)
+                this.genders = data.data;
+            }).catch((error) => {
+                console.log(error);
+            });
+        },
+        getServices() {
+            axios.get('/api/services').then(({ data }) => {
+                // console.log(data)
+                this.services = data.data;
+            }).catch((error) => {
+                console.log(error);
+            });
+        },
     },
     mounted() {
-        this.getHouses();
+        this.getPatients();
+        this.getServices();
+        this.getGenders();
     },
 }
 </script>

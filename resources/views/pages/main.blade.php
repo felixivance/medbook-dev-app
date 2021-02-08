@@ -21,16 +21,16 @@
                     </li>
                     <li class="menu-title">View</li><!-- /.menu-title -->
                     <li>
-                        <router-link to="/admin/houses"> <i class="menu-icon ti-home"></i>Patients Records </router-link>
+                        <router-link to="/admin/patients"> <i class="menu-icon ti-home"></i>Patients Records </router-link>
                     </li>
 
                     <li class="menu-title">SETTINGS </li><!-- /.menu-title -->
 
                     <li>
-                        <router-link to="/admin/sms" > <i class="menu-icon fa fa-cogs"></i>Gender </router-link>
+                        <router-link to="/admin/gender" > <i class="menu-icon fa fa-cogs"></i>Gender </router-link>
                     </li>
                     <li>
-                        <router-link to="/admin/charges" > <i class="menu-icon fa fa-cogs"></i>Services </router-link>
+                        <router-link to="/admin/services" > <i class="menu-icon fa fa-cogs"></i>Services </router-link>
                     </li>
 
 

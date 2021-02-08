@@ -60,8 +60,15 @@ class PatientController extends Controller
     {
 
         try{
+//            'genderId','serviceId', 'firstName','lastName','dateOfBirth','comments'
             $patient = Patient::find($id);
-            $patient->genderType = $request['genderType'];
+            $patient->genderId = $request['genderId'];
+            $patient->serviceId = $request['serviceId'];
+            $patient->firstName = $request['firstName'];
+            $patient->lastName = $request['lastName'];
+            $patient->dateOfBirth = $request['dateOfBirth'];
+            $patient->comments = $request['comments'];
+
             $patient->save();
 
             return api_response(true, null, 'success',

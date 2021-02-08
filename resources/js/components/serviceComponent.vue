@@ -11,10 +11,10 @@
                             <div class="card-header bg-dark">
                                 <div class="row">
                                     <div class="col-md-10">
-                                        <strong class="card-title text-light">Houses</strong>
+                                        <strong class="card-title text-light">Services</strong>
                                     </div>
                                     <div class="col-md-2">
-                                        <button @click="openModal" type="button" class="btn btn-primary">Add House</button>
+                                        <button @click="openModal" type="button" class="btn btn-primary">Add Service</button>
                                     </div>
                                 </div>
                             </div>
@@ -41,11 +41,7 @@
                                                 <b-button variant="dark" :disabled="!filter" @click="filter = ''">Clear</b-button>
                                             </b-input-group-append>
                                         </b-input-group>
-                                        <br/>
-                                        <b-button size="sm">Copy</b-button>
-                                        <b-button size="sm">Excel</b-button>
-                                        <b-button size="sm">CSV</b-button>
-                                        <b-button size="sm">PDF</b-button>
+
                                     </div>
                                 </div>
                                 <br/>
@@ -55,7 +51,7 @@
                                             Edit
                                         </b-button>
                                         &nbsp;
-                                        <b-button @click="deleteHouse(row.item.id)" class="btn btn-sm" variant="danger">
+                                        <b-button @click="deleteService(row.item.id)" class="btn btn-sm" variant="danger">
                                             Delete
                                         </b-button>
                                     </template>
@@ -78,24 +74,21 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        <h5 v-if="!editMode" class="modal-title" id="mediumModalLabel">Add House</h5>
-                        <h5 v-else class="modal-title" id="mediumModalLabel">Update House</h5>
+                        <h5 v-if="!editMode" class="modal-title" id="mediumModalLabel">Add Service</h5>
+                        <h5 v-else class="modal-title" id="mediumModalLabel">Update Service</h5>
                     </div>
-                    <form @submit.prevent="editMode ? updateHouse() : addHouse()">
+                    <form @submit.prevent="editMode ? updateService() : addService()">
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="company" class="form-control-label">House Number:</label>
-                                <input required v-model="form.houseNumber" type="text" id="company" placeholder="Enter house number" class="form-control" />
+                                <label for="company" class="form-control-label">Type Of Service:</label>
+                                <input required v-model="form.typeOfService" type="text" id="company" placeholder="Enter Type of Service" class="form-control" />
                             </div>
-                            <div class="form-group">
-                                <label  class="form-control-label">Meter Number:</label>
-                                <input required v-model="form.meterNumber" type="text" placeholder="Enter meter number" class="form-control" />
-                            </div>
+
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                            <button v-if="!editMode" type="submit" class="btn btn-primary">Add House</button>
-                            <button v-else type="submit" class="btn btn-primary">Update House</button>
+                            <button v-if="!editMode" type="submit" class="btn btn-primary">Add Service</button>
+                            <button v-else type="submit" class="btn btn-primary">Update Service</button>
                         </div>
                     </form>
                 </div>
@@ -110,7 +103,7 @@ import $ from 'jquery';
 export default {
     data() {
         return {
-            fields: ['#', 'houseNumber', 'meterNumber', 'actions'],
+            fields: ['#', 'typeOfService', 'actions'],
             items: [],
             perPage: 10,
             currentPage: 1,
@@ -119,8 +112,7 @@ export default {
             editMode: false,
             form: new Form({
                 id: '',
-                houseNumber: '',
-                meterNumber: '',
+                typeOfService: '',
             })
         }
     },
@@ -138,14 +130,14 @@ export default {
             $('#mediumModal').modal('show');
             this.editMode = false;
         },
-        openEditModal(house) {
+        openEditModal(service) {
             $('#mediumModal').modal('show');
             this.editMode = true;
-            this.form.fill(house)
+            this.form.fill(service)
             // console.log(this.form);
         },
-        getHouses() {
-            axios.get('/api/houses').then(({ data }) => {
+        getServices() {
+            axios.get('/api/services').then(({ data }) => {
                 // console.log(data)
                 this.items = data.data;
                 this.totalRows = this.items.length
@@ -153,36 +145,34 @@ export default {
                 console.log(error);
             });
         },
-        addHouse() {
-            axios.post('/api/houses/', this.form).then(({ data }) => {
+        addService() {
+            axios.post('/api/services/', this.form).then(({ data }) => {
                 // console.log(data);
                 if (data.success) {
                     this.form.reset();
-                    this.getHouses();
+                    this.getServices();
                     $('#mediumModal').modal('hide');
                     Swal.fire({
-                        position: 'top-end',
                         icon: 'success',
-                        title: 'House added.',
+                        title: 'Service added.',
                         showConfirmButton: true,
-                        timer: 1000
                     });
                 }
             }).catch((error) => {
                 console.log(error);
             });
         },
-        updateHouse() {
-            axios.put('/api/houses/' + this.form.id, this.form).then(({ data }) => {
+        updateService() {
+            axios.put('/api/services/' + this.form.id, this.form).then(({ data }) => {
                 // console.log(data);
                 if (data.success) {
                     this.form.reset();
-                    this.getHouses();
+                    this.getServices();
                     $('#mediumModal').modal('hide');
                     Swal.fire({
                         position: 'top-end',
                         icon: 'success',
-                        title: 'House updated.',
+                        title: 'Service updated.',
                         showConfirmButton: true,
                         timer: 1000
                     });
@@ -199,11 +189,11 @@ export default {
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete house!'
+                confirmButtonText: 'Yes, delete Service!'
             }).then((result) => {
                 if (result.isConfirmed) {
                     console.log(id);
-                    axios.delete('/api/houses/' + id,).then(({ data }) => {
+                    axios.delete('/api/services/' + id,).then(({ data }) => {
                         // console.log(data);
                         if (data.success) {
                             this.form.reset();
@@ -211,7 +201,7 @@ export default {
                             $('#mediumModal').modal('hide');
                             Swal.fire(
                                 'Deleted!',
-                                'House has been deleted.',
+                                'Service has been deleted.',
                                 'success'
                             )
                         }
@@ -223,7 +213,7 @@ export default {
         }
     },
     mounted() {
-        this.getHouses();
+        this.getServices();
     },
 }
 </script>

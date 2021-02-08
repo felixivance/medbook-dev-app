@@ -37,6 +37,11 @@ window.axios = axios;
 import Swal from 'sweetalert2'
 window.Swal = Swal;
 
+import { BootstrapVue } from 'bootstrap-vue'
+
+// Install BootstrapVue
+Vue.use(BootstrapVue)
+
 Vue.filter('filterDate', function (myDate) {
     return moment(new Date(myDate)).format('Do MMMM YYYY, HH:mm:ss A');
 });
