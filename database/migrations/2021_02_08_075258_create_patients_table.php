@@ -15,6 +15,14 @@ class CreatePatientsTable extends Migration
     {
         Schema::create('patients', function (Blueprint $table) {
             $table->id();
+            $table->string('firstName')->nullable();
+            $table->string('lastName')->nullable();
+            $table->date('dateOfBirth')->nullable();
+            $table->bigInteger('genderId')->unsigned()->index()->nullable();//added nullable due to deleting of genders
+            $table->foreign('genderId')->references('id')->on('genders');
+            $table->bigInteger('serviceId')->unsigned()->index()->nullable(); //added nullable due to deleting of services
+            $table->foreign('serviceId')->references('id')->on('services');
+            $table->text('comments')->nullable();
             $table->timestamps();
         });
     }

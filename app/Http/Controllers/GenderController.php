@@ -3,83 +3,88 @@
 namespace App\Http\Controllers;
 
 use App\Models\Gender;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class GenderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        //get all genders
+        $gender = Gender::orderBy('genderType','desc')->get();
+
+        return api_response(true, null, 'success',
+            'successfully fetched genders', $house);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
-        //
+        try{
+            $gender = new Gender();
+            $gender->genderType = $request['genderType'];
+            $gender->save();
+
+            return api_response(true, null, 'success',
+                'successfully added gender information', $gender);
+
+        }catch (\Exception $ex){
+            return api_response(false, $ex->getMessage(), 'error',
+                'error adding gender information', null);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Gender  $gender
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Gender $gender)
+
+    public function show($id)
     {
-        //
+        try{
+            $gender = Gender::find($id);
+
+            return api_response(true, null, 'success',
+                'successfully fetched gender information', $gender);
+
+        }catch (\Exception $ex){
+            return api_response(false, $ex->getMessage(), 'error',
+                'error fetching gender information', null);
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Gender  $gender
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Gender $gender)
+
+    public function update(Request $request, $id)
     {
-        //
+
+        try{
+            $gender = Gender::find($id);
+            $gender->genderType = $request['genderType'];
+            $gender->save();
+
+            return api_response(true, null, 'success',
+                'successfully updated gender information', $gender);
+
+        }catch (\Exception $ex){
+            return api_response(false, $ex->getMessage(), 'error',
+                'error updating gender information', null);
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Gender  $gender
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Gender $gender)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Gender  $gender
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Gender $gender)
+    public function destroy($id)
     {
-        //
+        try{
+            $gender = Gender::find($id);
+
+            //get all users who have that gender and put null
+            $users = User::where('genderId', $id)->update(['genderId',NULL]);
+
+            $gender->delete();
+
+            return api_response(true, null, 'success',
+                'successfully deleted gender information', null);
+
+        }catch (\Exception $ex){
+            return api_response(false, $ex->getMessage(), 'error',
+                'error deleting gender information', null);
+        }
     }
 }

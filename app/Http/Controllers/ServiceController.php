@@ -3,83 +3,90 @@
 namespace App\Http\Controllers;
 
 use App\Models\Service;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ServiceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        //get all patients
+        $service = Service::orderBy('typeOfService','desc')->get();
+
+        return api_response(true, null, 'success',
+            'successfully fetched services', $service);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
-        //
+
+        try{
+            $service = new Service();
+            $service->typeOfService = $request['typeOfService'];
+            $service->save();
+
+            return api_response(true, null, 'success',
+                'successfully added service information', $service);
+
+        }catch (\Exception $ex){
+            return api_response(false, $ex->getMessage(), 'error',
+                'error adding service information', null);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Service  $service
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Service $service)
+
+    public function show($id)
     {
-        //
+        try{
+            $service = Service::find($id);
+
+            return api_response(true, null, 'success',
+                'successfully fetched service information', $service);
+
+        }catch (\Exception $ex){
+            return api_response(false, $ex->getMessage(), 'error',
+                'error fetching service information', null);
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Service  $service
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Service $service)
+
+    public function update(Request $request, $id)
     {
-        //
+
+        try{
+            $service = Service::find($id);
+            $service->typeOfService = $request['typeOfService'];
+            $service->save();
+
+            return api_response(true, null, 'success',
+                'successfully updated service information', $service);
+
+        }catch (\Exception $ex){
+            return api_response(false, $ex->getMessage(), 'error',
+                'error updating service information', null);
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Service  $service
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Service $service)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Service  $service
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Service $service)
+    public function destroy($id)
     {
-        //
+        try{
+            $service = Service::find($id);
+
+            //get all users who have that serviceId and put null
+            $users = User::where('serviceId', $id)->update(['serviceId',NULL]);
+
+
+            $service->delete();
+
+            return api_response(true, null, 'success',
+                'successfully deleted service information', null);
+
+        }catch (\Exception $ex){
+            return api_response(false, $ex->getMessage(), 'error',
+                'error deleting service information', null);
+        }
     }
 }
