@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,4 +20,21 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('/admin/{any?}/{component?}', function () {
+    if(Auth::user() == null){
+        return redirect()->route('login');
+    }else{
+        return view('pages.main');
+    }
+});
+
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('logout', [
+    'as' => 'logout',
+    function () {
+        Auth::logout();
+        return redirect()->route('login');
+    }
+]);

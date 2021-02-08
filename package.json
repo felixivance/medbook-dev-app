@@ -22,6 +22,10 @@
         "sass-loader": "^8.0.0",
         "vue": "^2.5.17",
         "vue-loader": "^15.9.6",
-        "vue-template-compiler": "^2.6.10"
+        "vue-template-compiler": "^2.6.10",
+        "vue-router": "^3.4.9",
+        "vform": "^1.0.1",
+        "moment": "^2.29.1",
+        "sweetalert2": "^10.13.0"
     }
 }
