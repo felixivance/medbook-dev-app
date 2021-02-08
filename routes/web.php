@@ -16,13 +16,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('pages.login');
-});
+})->name('main');
 
 Auth::routes();
 
 Route::get('/admin/{any?}/{component?}', function () {
     if(Auth::user() == null){
-        return redirect()->route('login');
+        return redirect()->route('main');
     }else{
         return view('pages.main');
     }
@@ -35,6 +35,6 @@ Route::get('logout', [
     'as' => 'logout',
     function () {
         Auth::logout();
-        return redirect()->route('login');
+        return redirect()->route('main');
     }
 ]);
