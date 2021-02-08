@@ -30,7 +30,7 @@ Clone the repository from https://github.com/felixivance/medbook-dev-app.git
   
   to start the project and use the credentials
   
-  admin@gmail.com as the email and password as the password
+  admin@hrms.com as the email and password12345 as the password
   
   
  
